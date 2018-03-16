@@ -1,0 +1,121 @@
+{
+	"login.html": {
+		"resources": [
+			"js/ionic.bundle.min.js",
+			"img/loginPwd.png",
+			"login.html",
+			"img/loginUser.png",
+			"js/jquery-3.2.1.min.js",
+			"css/ionic.min.css"
+		],
+		"refer": [
+			"login.html"
+		]
+	},
+	"AlarmHistory.html": {
+		"resources": [
+			"js/ionic.bundle.min.js",
+			"js/jquery-3.2.1.min.js",
+			"img/fanhui.png",
+			"css/ionic.min.css",
+			"fonts/ionicons.ttf",
+			"img/date.png",
+			"img/site.png",
+			"type-Smoke.html",
+			"untreated.html",
+			"detailAlarm.html",
+			"css/normalize3.0.2.min.css",
+			"js/mobiscroll.js",
+			"css/style.css",
+			"img/alarm2.wav",
+			"css/mobiscroll.css",
+			"css/mobiscroll_date.css",
+			"js/mobiscroll_date.js"
+		],
+		"refer": [
+			"type-Smoke.html",
+			"untreated.html",
+			"detailAlarm.html"
+		]
+	},
+	"type-Smoke.html": {
+		"resources": [
+			"type-infrared.html",
+			"AlarmHistory.html"
+		],
+		"refer": [
+			"type-infrared.html",
+			"AlarmHistory.html"
+		]
+	},
+	"type-infrared.html": {
+		"resources": [
+			"type-occupy.html",
+			"type-Smoke.html",
+			"detailAlarm.html",
+			"untreated.html"
+		],
+		"refer": [
+			"type-occupy.html",
+			"type-Smoke.html",
+			"detailAlarm.html",
+			"untreated.html"
+		]
+	},
+	"untreated.html": {
+		"resources": [
+			"Handled.html"
+		],
+		"refer": [
+			"Handled.html"
+		]
+	},
+	"type-occupy.html": {
+		"resources": [
+			"AlarmHistory.html",
+			"type-infrared.html",
+			"type-Smoke.html"
+		],
+		"refer": [
+			"AlarmHistory.html",
+			"type-infrared.html",
+			"type-Smoke.html"
+		]
+	},
+	"Handled.html": {
+		"resources": [
+			"AlarmHistory.html"
+		],
+		"refer": [
+			"AlarmHistory.html"
+		]
+	},
+	"detailAlarm.html": {
+		"resources": [
+			"img/pik-up.png",
+			"img/video.png",
+			"img/video-time.png",
+			"img/video-site.png",
+			"img/bofang.png",
+			"AlarmHistory.html",
+			"type-infrared.html"
+		],
+		"refer": [
+			"AlarmHistory.html",
+			"type-infrared.html"
+		]
+	},
+	"map.html": {
+		"resources": [
+			"js/ionic.bundle.min.js",
+			"css/ionic.min.css",
+			"fonts/ionicons.ttf",
+			"img/history.png",
+			"img/personal.png",
+			"AlarmHistory.html"
+		],
+		"refer": [
+			"AlarmHistory.html"
+		]
+	}
+}

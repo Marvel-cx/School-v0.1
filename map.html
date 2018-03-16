@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html ng-app="ionic">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<meta content="yes" name="apple-mobile-web-app-capable">
+		<meta content="black" name="apple-mobile-web-app-status-bar-style">
+		<meta content="telephone=no" name="format-detection">
+		<meta content="email=no" name="format-detection">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/ionic.min.css" />
+		<script src="js/ionic.bundle.min.js"></script>
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=NTnSwZu6V6aWz17y1ZNnUflKmKy8gskG"></script>
+		<script src="js/jquery-3.2.1.min.js"></script>
+			<style>
+				.bar-header {
+					height: 10vh;
+					padding-top: 0;
+					padding-bottom: 0;
+					position: fixed;
+					background: #5ad2e2;
+				}
+				
+				#allmap {
+					width: 100%;
+					height: 100vh;
+				}
+				
+				.bar-header img {
+					width: 5vh;
+					height: 5vh;
+					margin-top: 2vh;
+					position: absolute;
+				}
+			</style>
+	</head>
+
+	<body>
+		<div class="bar bar-header">
+			<a href="HandleResult.html"><img style="z-index: 10;" src="img/personal.png" /></a>
+			<h1 class="title" style="color: white;height:10vh;line-height: 10vh;">主页</h1>
+			<a href="AlarmHistory.html"><img src="img/history.png" / style="right: 10px;"></a>
+		</div>
+		<audio id="audio" src="img/alarm2.wav" loop="3" style="border:1px solid black;width: 100%;"></audio>
+		<ion-content class="mapContent" style="overflow: auto;">
+			<!--<img src="images/PE/map.jpg" />-->
+			<div id="allmap" class="map"></div>
+		</ion-content>
+	</body>
+	<script>
+		document.addEventListener('plusready', function() {
+			//console.log("所有plus api都应该在此事件发生后调用，否则会出现plus is undefined。"
+
+		});
+
+		//audio 
+		var audio = document.getElementById("audio");
+		
+		function audioAutoPlay() {
+			var audio = document.getElementById('audio');
+			audio.play();
+		}
+		
+		var map = new BMap.Map("allmap");
+		var currentPoint;
+		var destinationPoint = "";
+		var ls=window.localStorage;
+		var school_alarm_id=ls.getItem("school_alarm_id");
+		var desLat;
+		var desLng;
+		var geolocation = new BMap.Geolocation();
+		geolocation.getCurrentPosition(function(r) {
+			if(this.getStatus() == BMAP_STATUS_SUCCESS) {
+				var mk = new BMap.Marker(r.point);
+				map.addOverlay(mk);
+				map.panTo(r.point);
+				currentPoint = new BMap.Point(r.point.lng, r.point.lat);
+				map.centerAndZoom(currentPoint, 15);
+			} else {
+				alert('failed' + this.getStatus());
+			}
+		}, { enableHighAccuracy: true });
+
+		map.enableScrollWheelZoom(true);
+		map.disableDragging(); //禁止拖拽
+
+		setTimeout(function() {
+			map.enableDragging(); //两秒后开启拖拽
+			map.enableInertialDragging(); //两秒后开启惯性拖拽
+		}, 1000);
+
+		function getdata() {
+			$.ajax({
+				type: "GET",
+				url: "http://223.72.155.26:8080/SchoolServer/newInfo",
+				//url: "http://223.72.155.26:8666/SchoolServer/easyInfo",
+				//url: "http://172.16.31.172:8080/SchoolServer/easyInfo",
+				dataType: 'JSONP',
+				jsonp: "callback",
+				success: function(result) {
+					data = eval(result);
+					addBox(result);
+				},
+				error: function() {
+					alert("服务器连接失败");
+				}
+			});
+		}
+		getdata();
+		setInterval(getdata, 2000);
+		
+		function addBox(result) {
+			$.each(result, function(index, obj) {
+				
+				if(obj['recordNo'] != school_alarm_id){
+					//map = new BMap.Map("showmap");
+					school_alarm_id=obj['recordNo'];
+					ls.setItem("school_alarm_id",school_alarm_id);
+					audioAutoPlay();				
+					//路径更改
+					//lat:116.462514
+					//lng:40.235689
+					desLat=obj['latitude'];
+					desLng=obj['longitude'];
+					
+					destinationPoint = new BMap.Point(desLat,desLng);
+					
+					
+					geolocation.getCurrentPosition(function(r) {
+					if(this.getStatus() == BMAP_STATUS_SUCCESS) {
+						var mk = new BMap.Marker(r.point);
+						map.addOverlay(mk);
+						map.panTo(r.point); 
+						currentPoint = new BMap.Point(r.point.lng, r.point.lat);
+						map.centerAndZoom(currentPoint, 15);
+						var driving = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});
+						driving.search(currentPoint, destinationPoint);
+					} else {
+						alert('failed' + this.getStatus()); 
+					}
+					}, { enableHighAccuracy: true });
+				}
+			});
+		}
+	</script>
+
+</html>
